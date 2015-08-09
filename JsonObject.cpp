@@ -256,3 +256,18 @@ void JsonObject::buildObject(JsonObject &parent, json_object *obj)
         };
     }
 }
+
+std::string JsonObject::getString ()
+{
+    return strValue;
+}
+
+bool JsonObject::getBool ()
+{
+    return boolValue;
+}
+
+int JsonObject::getInt ()
+{
+    return intValue;
+}

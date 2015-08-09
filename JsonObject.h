@@ -59,11 +59,14 @@ public:
     std::vector<int> &getIntArray ();
 
     std::string getStringAt (unsigned int i);
+    std::string getString ();
     std::string toString ();
 
     bool hasChildren ();
     bool getBoolAt (unsigned int i);
+    bool getBool ();
     int getIntAt (unsigned int i);
+    int getInt ();
 
     JsonObjectType getType ();
     JsonObject push_back (std::string key, JsonObject val);
