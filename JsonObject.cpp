@@ -225,6 +225,7 @@ void JsonObject::buildObject(JsonObject &parent, json_object *obj)
                             
                             objArray.push_back(child);
                         }
+                        break;
 
                         default:break;
                     }
