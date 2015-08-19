@@ -36,6 +36,7 @@ enum JsonObjectType {
     INT_ARRAY,
     STR_ARRAY,
     BOOL_ARRAY,
+    OBJECT_ARRAY,
     LAST_OBJECT_TYPE
 };
 
@@ -46,6 +47,7 @@ public:
     JsonObject (bool val);
     JsonObject (const char* val);
     JsonObject (std::vector<std::string> val);
+    JsonObject (std::vector<JsonObject> val);
     JsonObject (std::vector<bool> val);
     JsonObject (std::vector<int> val);
     JsonObject ();
@@ -54,9 +56,10 @@ public:
 
     std::map<std::string, JsonObject> getChildren ();
 
-    std::vector<std::string> &getStringArray ();
-    std::vector<bool> &getBoolArray ();
-    std::vector<int> &getIntArray ();
+    std::vector<std::string> getStringArray ();
+    std::vector<JsonObject> getObjectArray ();
+    std::vector<bool> getBoolArray ();
+    std::vector<int> getIntArray ();
 
     std::string getStringAt (unsigned int i);
     std::string getString ();
@@ -78,6 +81,7 @@ private:
 
     std::map<std::string, JsonObject> children;
 
+    std::vector<JsonObject>  objArray;
     std::vector<std::string> strArray;
     std::vector<bool>        boolArray;
     std::vector<int>         intArray;

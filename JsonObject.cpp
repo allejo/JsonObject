@@ -45,6 +45,12 @@ JsonObject::JsonObject (const char* val)
     strValue = val;
 }
 
+JsonObject::JsonObject (std::vector<JsonObject> val)
+{
+    objType  = OBJECT_ARRAY;
+    objArray = val;
+}
+
 JsonObject::JsonObject (std::vector<std::string> val)
 {
     objType  = STR_ARRAY;
@@ -78,9 +84,24 @@ std::map<std::string, JsonObject> JsonObject::getChildren ()
     return children;
 }
 
-std::vector<bool> &JsonObject::getBoolArray ()
+std::vector<std::string> JsonObject::getStringArray ()
+{
+    return strArray;
+}
+
+std::vector<JsonObject> JsonObject::getObjectArray ()
+{
+    return objArray;
+}
+
+std::vector<bool> JsonObject::getBoolArray ()
 {
     return boolArray;
+}
+
+std::vector<int> JsonObject::getIntArray ()
+{
+    return intArray;
 }
 
 bool JsonObject::getBoolAt (unsigned int i)
@@ -88,19 +109,9 @@ bool JsonObject::getBoolAt (unsigned int i)
     return boolArray.at(i);
 }
 
-std::vector<int> &JsonObject::getIntArray ()
-{
-    return intArray;
-}
-
 int JsonObject::getIntAt (unsigned int i)
 {
     return intArray.at(i);
-}
-
-std::vector<std::string> &JsonObject::getStringArray ()
-{
-    return strArray;
 }
 
 std::string JsonObject::getStringAt (unsigned int i)
@@ -162,12 +173,13 @@ void JsonObject::buildObject(JsonObject &parent, json_object *obj)
 
                 parent.push_back(key, child);
             }
-                break;
+            break;
 
             case json_type_array:
             {
                 json_object *jArray = val;
 
+                std::vector<JsonObject>  objArray;
                 std::vector<std::string> strArray;
                 std::vector<bool>        boolArray;
                 std::vector<int>         intArray;
@@ -187,7 +199,7 @@ void JsonObject::buildObject(JsonObject &parent, json_object *obj)
                             std::string value = json_object_get_string(jValue);
                             strArray.push_back(value);
                         }
-                            break;
+                        break;
 
                         case json_type_boolean:
                         {
@@ -195,7 +207,7 @@ void JsonObject::buildObject(JsonObject &parent, json_object *obj)
 
                             boolArray.push_back(value);
                         }
-                            break;
+                        break;
 
                         case json_type_int:
                         {
@@ -203,7 +215,16 @@ void JsonObject::buildObject(JsonObject &parent, json_object *obj)
 
                             intArray.push_back(value);
                         }
-                            break;
+                        break;
+                            
+                        case json_type_object:
+                        {
+                            JsonObject child;
+                            
+                            JsonObject::buildObject(child, jValue);
+                            
+                            objArray.push_back(child);
+                        }
 
                         default:break;
                     }
@@ -223,10 +244,14 @@ void JsonObject::buildObject(JsonObject &parent, json_object *obj)
                 {
                     child = JsonObject(intArray);
                 }
+                else if (!objArray.empty())
+                {
+                    child = JsonObject(objArray);
+                }
 
                 parent.push_back(key, child);
             }
-                break;
+            break;
 
             case json_type_boolean:
             {
@@ -234,7 +259,7 @@ void JsonObject::buildObject(JsonObject &parent, json_object *obj)
 
                 parent.push_back(key, value);
             }
-                break;
+            break;
 
             case json_type_int:
             {
@@ -242,7 +267,7 @@ void JsonObject::buildObject(JsonObject &parent, json_object *obj)
 
                 parent.push_back(key, value);
             }
-                break;
+            break;
 
             case json_type_string:
             {
@@ -250,7 +275,7 @@ void JsonObject::buildObject(JsonObject &parent, json_object *obj)
 
                 parent.push_back(key, value.c_str());
             }
-                break;
+            break;
 
             default: break;
         };
