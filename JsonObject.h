@@ -67,6 +67,7 @@ public:
 
     bool hasChildren ();
     bool getBoolAt (unsigned int i);
+    bool hasChild (std::string key);
     bool getBool ();
     int getIntAt (unsigned int i);
     int getInt ();

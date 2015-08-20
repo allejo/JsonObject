@@ -79,6 +79,11 @@ JsonObject JsonObject::getChild (std::string key)
     return children[key];
 }
 
+bool JsonObject::hasChild (std::string key)
+{
+    return (bool)children.count(key);
+}
+
 std::map<std::string, JsonObject> JsonObject::getChildren ()
 {
     return children;
@@ -216,13 +221,13 @@ void JsonObject::buildObject(JsonObject &parent, json_object *obj)
                             intArray.push_back(value);
                         }
                         break;
-                            
+
                         case json_type_object:
                         {
                             JsonObject child;
-                            
+
                             JsonObject::buildObject(child, jValue);
-                            
+
                             objArray.push_back(child);
                         }
                         break;
