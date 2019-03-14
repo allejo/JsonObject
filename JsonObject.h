@@ -23,7 +23,7 @@ THE SOFTWARE.
 #ifndef __JsonObject_H_
 #define __JsonObject_H_
 
-#include <json/json.h>
+#include <json-c/json.h>
 #include <string>
 #include <vector>
 #include <map>
